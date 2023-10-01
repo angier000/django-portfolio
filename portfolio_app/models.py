@@ -19,6 +19,7 @@ class Portfolio(models.Model):
 class Project(models.Model):
     title = models.CharField(max_length = 200)
     description = models.TextField()
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, default = None)
 
     def __str__(self):
         return self.title
@@ -42,11 +43,11 @@ class Student(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField("UCCS Email", max_length=200)
     major = models.CharField(max_length=200, choices=MAJOR)
+    portfolio = models.OneToOneField(Portfolio, on_delete=models.CASCADE, unique=True, default=None)
 
     #Define default String to return the name for representing the Model object."
     def __str__(self):
         return self.name
-
 
     #Returns the URL to access a particular instance of MyModelName.
     #if you define this method then Django will automatically 
