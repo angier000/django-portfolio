@@ -2,12 +2,19 @@
 
 
 {% block content %}
-<h1>Portfolio Title: {{ portfolio.title }}</h1>
+    <h1>Portfolio Title: {{ portfolio.title }}</h1>
 
+    <p><strong>Portfolio Active: </strong> {{ portfolio.is_active }}</p>
+    <p><strong>About: </strong> {{ portfolio.about }}</p>
+    <p><strong>Contact Email: </strong> {{ portfolio.contact_email }} </p>
 
-<p><strong>Portfolio Active: </strong> {{ portfolio.is_active }}</p>
-<p><strong>About: </strong> {{ portfolio.about }}</p>
-<p><strong>Contact Email: </strong> {{ portfolio.contact_email }} </p>
-
+    <h2>Project List</h2>
+    <ul>
+        {% for project in projects %}
+            <li>
+                <a href="{{ project.get_absolute_url }}">{{ project.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}

@@ -22,6 +22,24 @@ class StudentDetailView(generic.DetailView):
 class PortfolioDetailView(generic.DetailView):
     model = Portfolio
 
+    # override get_context_data method, change context data that will be passed to template
+    def get_context_data(self, **kwargs):
+
+        # call method parent class (PortfolioDetailView) and get data from original method
+        context = super().get_context_data(**kwargs)
+
+        # get current portfolio
+        current = self.get_object()
+
+        # get projects associated with current portfolio
+        projects = Project.objects.filter(portfolio=current)
+
+        # add context info
+        context['projects'] = projects
+
+        # return updated context
+        return context
+
 class ProjectListView(generic.ListView):
     model = Project
 
