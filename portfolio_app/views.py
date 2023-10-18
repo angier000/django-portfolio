@@ -7,8 +7,11 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
+    student_active_portfolios = Student.objects.select_related('portfolio').all().filter(portfolio__is_active=True)
+    print("active portfolio query set", student_active_portfolios)
+    
     # Render the HTML template index.html with the data in the context variable.
-    return render(request, 'portfolio_app/index.html')
+    return render( request, 'portfolio_app/index.html', {'student_active_portfolios':student_active_portfolios})
 
 class StudentListView(generic.ListView):
     model = Student
@@ -18,3 +21,9 @@ class StudentDetailView(generic.DetailView):
 
 class PortfolioDetailView(generic.DetailView):
     model = Portfolio
+
+class ProjectListView(generic.ListView):
+    model = Project
+
+class ProjectDetailView(generic.DetailView):
+    model = Project
