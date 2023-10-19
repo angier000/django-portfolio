@@ -7,8 +7,9 @@
 <form action="{% url 'delete_project' project.portfolio.id project.id %}" method="POST">
 
     {% csrf_token %}
-    <a href="{% url 'portfolio-detail' project.portfolio.id %}">Cancel</a>
+    <a class="btn btn-primary" href="{% url 'portfolio-detail' project.portfolio.id %}">Cancel</a>
     <input type="submit" value="Submit">
+
 </form>
 
 {% endblock %}
