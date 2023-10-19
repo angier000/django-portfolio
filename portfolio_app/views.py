@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import *
 from django.views import generic
@@ -70,3 +70,25 @@ def createProject(request, portfolio_id):
 
     context = {'form': form}
     return render(request, 'portfolio_app/project_form.html', context)
+
+
+def deleteProject(request, portfolio_id, project_id):
+    # get the portfolio
+    portfolio = get_object_or_404(Portfolio, pk=portfolio_id)
+
+    # get the project
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == 'POST':
+        # check if project belongs to the correct portfolio
+        if project.portfolio == portfolio:
+            project.delete()
+            return redirect('portfolio-detail', portfolio_id)
+        
+        # pass project to template to confirm deletion
+        context = {'portfolio': portfolio, 'project': project}
+        return render(request, 'portfolio_app/project_delete.html', context)
+    
+    # handle GET requests (shows confirmation page)
+    context = {'portfolio': portfolio, 'project': project}
+    return render(request, 'portfolio_app/project_delete.html', context)
