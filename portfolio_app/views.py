@@ -92,3 +92,22 @@ def deleteProject(request, portfolio_id, project_id):
     # handle GET requests (shows confirmation page)
     context = {'portfolio': portfolio, 'project': project}
     return render(request, 'portfolio_app/project_delete.html', context)
+
+
+def updateProject(request, portfolio_id, project_id):
+    # get the project
+    project = get_object_or_404(Project, pk=project_id)
+
+    # create form with existing data
+    form = ProjectForm(instance=project)
+
+    if request.method == 'POST':
+        # create new form with updated data
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect('portfolio-detail', portfolio_id)
+        
+    context = {'project': project, 'form': form}
+    return render(request, 'portfolio_app/project_form.html', context)
+
