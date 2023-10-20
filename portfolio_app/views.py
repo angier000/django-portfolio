@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import *
 from django.views import generic
-from .forms import ProjectForm #, PortfolioForm
+from .forms import ProjectForm, PortfolioForm
 from django.contrib import messages
 
 # Create your views here.
@@ -111,3 +111,23 @@ def updateProject(request, portfolio_id, project_id):
     context = {'project': project, 'form': form}
     return render(request, 'portfolio_app/project_form.html', context)
 
+
+def updatePortfolio(request, portfolio_id):
+    # get the project
+    portfolio = get_object_or_404(Portfolio, pk=portfolio_id)
+
+    # get the student with the associated portfolio
+    student = get_object_or_404(Student, portfolio=portfolio)
+
+    # create form with existing data
+    form = PortfolioForm(instance=portfolio)
+
+    if request.method == 'POST':
+        # create new form with updated data
+        form = PortfolioForm(request.POST, instance=portfolio)
+        if form.is_valid():
+            form.save()
+            return redirect('student-detail', student.id)
+        
+    context = {'student': student, 'form': form}
+    return render(request, 'portfolio_app/portfolio_form.html', context)
